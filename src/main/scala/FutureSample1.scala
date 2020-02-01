@@ -2,8 +2,11 @@ import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
+// シンプルに並行実行のサンプル
 object FutureSample1 extends App {
   val sleepTime = 1000
+  println(s"thread(main), id = ${Thread.currentThread().getId()}")
+
   // 並列実行
   // 先に実行で、後に出力
   val parallel1 = Future {

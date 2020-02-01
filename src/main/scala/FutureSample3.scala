@@ -2,8 +2,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration.Duration
 
+// 並行実行されるケースと、直列実行されるケースの比較
 object FutureSample3 extends App {
   val sleepTime = 1000
+  println(s"thread(main), id = ${Thread.currentThread().getId()}")
+
   // 並列実行
   println("===== 並行実行 =====")
 
