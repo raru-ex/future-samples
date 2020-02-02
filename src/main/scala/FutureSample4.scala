@@ -2,8 +2,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration.Duration
 
-// 4-2と比較。不思議な動き
-object FutureSample5 extends App {
+object FutureSample4 extends App {
   val sleepTime = 1000
   println(s"thread(main), id = ${Thread.currentThread().getId()}")
 
@@ -14,24 +13,25 @@ object FutureSample5 extends App {
     "I'm a Future."
   }
 
+  // pure futureを使いまわさないで試すのもある
   val mainThreadMappedFuture = pureFuture map {
     val name = "main thread mapped future"
-    println(s"thread($name), id = ${Thread.currentThread().getId()}")
-    _.appended("Now, I am Mapped.")
+    println(s"thread($name), id = ${Thread.currentThread().getId()}") // この2行が上手く解析できておらずmapの引数に渡せていない可能性がある
+    _.concat("Now, I am Mapped.")
   }
 
   val mappedFuture = pureFuture map { v =>
     val name = "mapped future"
     println(s"thread($name), id = ${Thread.currentThread().getId()}")
-    v.appended("Now, I am Mapped.")
+    v.concat("Now, I am Mapped.")
   }
 
   val flattedFuture = mappedFuture flatMap { v =>
     Future {
       val name = "flatted"
-      Thread.sleep(sleepTime * 2)
+      Thread.sleep(sleepTime)
       println(s"thread($name), id = ${Thread.currentThread().getId()}")
-      v.appended("And, I am flatMapped")
+      v.concat("And, I am flatMapped")
     }
   }
 
